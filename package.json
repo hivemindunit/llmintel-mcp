@@ -1,0 +1,67 @@
+{
+  "name": "@llmintel/mcp",
+  "version": "0.2.0",
+  "mcpName": "ai.llmintel/model-lifecycle",
+  "description": "MCP server for AI model lifecycle data — check whether a model id is deprecated or retiring, and what to migrate to, across OpenAI, Anthropic, Azure, AWS Bedrock, Google, and Cohere.",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "llm",
+    "deprecation",
+    "model-lifecycle",
+    "openai",
+    "anthropic",
+    "bedrock"
+  ],
+  "license": "MIT",
+  "homepage": "https://llmintel.ai",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hivemindunit/llmintel-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hivemindunit/llmintel-mcp/issues"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "bin": {
+    "llmintel-mcp": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "server.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/",
+    "provenance": true
+  },
+  "scripts": {
+    "build": "tsup",
+    "smoke": "node scripts/smoke.mjs",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

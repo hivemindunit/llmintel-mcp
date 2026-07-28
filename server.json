@@ -1,0 +1,53 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "ai.llmintel/model-lifecycle",
+  "title": "LLMIntel Model Lifecycle",
+  "description": "Check whether an LLM model id is deprecated, retiring, or retired, and what to migrate to.",
+  "version": "0.2.0",
+  "websiteUrl": "https://llmintel.ai",
+  "repository": {
+    "url": "https://github.com/hivemindunit/llmintel-mcp",
+    "source": "github"
+  },
+  "icons": [
+    {
+      "src": "https://llmintel.ai/logo.svg",
+      "mimeType": "image/svg+xml",
+      "sizes": ["any"]
+    },
+    {
+      "src": "https://llmintel.ai/logo.png",
+      "mimeType": "image/png",
+      "sizes": ["400x400"]
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://llmintel.ai/v1/mcp"
+    }
+  ],
+  "packages": [
+    {
+      "registryType": "npm",
+      "registryBaseUrl": "https://registry.npmjs.org",
+      "identifier": "@llmintel/mcp",
+      "version": "0.2.0",
+      "transport": { "type": "stdio" },
+      "environmentVariables": [
+        {
+          "name": "LLMINTEL_API_KEY",
+          "description": "Optional. The catalog is public and needs no key; supplying one only raises the rate-limit budget.",
+          "isRequired": false,
+          "isSecret": true
+        },
+        {
+          "name": "LLMINTEL_BASE_URL",
+          "description": "Optional. Override the catalog origin (defaults to https://llmintel.ai). Useful for self-hosted or staging deployments.",
+          "isRequired": false,
+          "isSecret": false
+        }
+      ]
+    }
+  ]
+}
