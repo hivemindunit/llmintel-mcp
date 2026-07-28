@@ -1,0 +1,68 @@
+name: Publish @llmintel/mcp
+
+# This workflow lives in the PUBLIC mirror repo (hivemindunit/llmintel-mcp), where the repository
+# root IS the package. Because the mirror is public, npm provenance is accepted.
+# Triggered by the `v*` tag that the monorepo's sync job pushes here.
+#
+# Required secret in the mirror repo: NPM_TOKEN - a granular npm token with read/write on the
+# @llmintel scope, held in the `production` environment. The job must declare that environment or
+# `secrets.NPM_TOKEN` resolves to an empty string and the publish fails with a 401.
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  id-token: write # required for npm provenance (signed link to this build)
+
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    environment: production
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          registry-url: "https://registry.npmjs.org"
+          cache: npm
+
+      - name: Install (reproducible)
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npx vitest run
+
+      - name: Build
+        run: npm run build
+
+      # The whole product is the stdio binary, so a packaging regression that drops dist/cli.js or
+      # its shebang would publish an installable-but-inert package. npm versions are immutable, so
+      # catch it here rather than with a 0.1.1.
+      - name: Verify the published bin is intact
+        run: |
+          set -euo pipefail
+          test -f dist/cli.js || { echo "::error::dist/cli.js missing"; exit 1; }
+          [ "$(head -n 1 dist/cli.js)" = "#!/usr/bin/env node" ] \
+            || { echo "::error::dist/cli.js is missing its shebang"; exit 1; }
+          node --check dist/cli.js
+
+      # Boot the server over stdio and assert it completes an MCP handshake and advertises its
+      # tools. Proves the tarball a user gets via `npx` actually runs.
+      - name: Smoke-test the packaged binary
+        run: |
+          set -euo pipefail
+          npm pack
+          npm install -g ./llmintel-mcp-*.tgz
+          node scripts/verify-install.mjs
+
+      - name: Publish (public, with provenance)
+        run: npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

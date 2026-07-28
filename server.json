@@ -1,0 +1,34 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
+  "name": "ai.llmintel/llmintel",
+  "description": "Check whether an LLM model id is deprecated, retiring, or retired — and what to migrate to. Normalized lifecycle data across OpenAI, Anthropic, Azure, AWS Bedrock, Google, and Cohere, sourced from each provider's own deprecation pages.",
+  "version": "0.1.0",
+  "websiteUrl": "https://llmintel.ai",
+  "repository": {
+    "url": "https://github.com/hivemindunit/llmintel-mcp",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "registryType": "npm",
+      "registryBaseUrl": "https://registry.npmjs.org",
+      "identifier": "@llmintel/mcp",
+      "version": "0.1.0",
+      "transport": { "type": "stdio" },
+      "environmentVariables": [
+        {
+          "name": "LLMINTEL_API_KEY",
+          "description": "Optional. The catalog is public and needs no key; supplying one only raises the rate-limit budget.",
+          "isRequired": false,
+          "isSecret": true
+        },
+        {
+          "name": "LLMINTEL_BASE_URL",
+          "description": "Optional. Override the catalog origin (defaults to https://llmintel.ai). Useful for self-hosted or staging deployments.",
+          "isRequired": false,
+          "isSecret": false
+        }
+      ]
+    }
+  ]
+}
