@@ -3,7 +3,7 @@
   "name": "ai.llmintel/model-lifecycle",
   "title": "LLMIntel Model Lifecycle",
   "description": "Check whether an LLM model id is deprecated, retiring, or retired, and what to migrate to.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "websiteUrl": "https://llmintel.ai",
   "repository": {
     "url": "https://github.com/hivemindunit/llmintel-mcp",
@@ -32,7 +32,7 @@
       "registryType": "npm",
       "registryBaseUrl": "https://registry.npmjs.org",
       "identifier": "@llmintel/mcp",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "transport": { "type": "stdio" },
       "environmentVariables": [
         {

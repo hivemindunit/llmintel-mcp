@@ -1,0 +1,28 @@
+# Smithery listing config: https://smithery.ai/docs/build/project-config
+#
+# The listing at https://smithery.ai/servers/llmintel/model-lifecycle was created through
+# Smithery's URL flow, which stores config server-side. This file exists so the parts that
+# matter are reviewable in git rather than only in a web panel, and so a future re-scan or
+# re-submission reproduces the same listing.
+#
+# `target: remote` means Smithery proxies to our own deployment; it does not build or host
+# anything. Only `name`, `target`, and `startCommand` are interpreted here. Display name,
+# long description, icon, and tags are edited in the Smithery panel.
+#
+# The config schema is deliberately empty: the catalog is public, so there is nothing for a
+# user to fill in before the first call. An empty schema means Smithery renders no auth modal
+# and the server is callable straight from the listing page. `LLMINTEL_API_KEY` is not offered
+# here on purpose — it only raises a rate limit, and asking for a key up front would suggest
+# one is required.
+
+name: model-lifecycle
+target: remote
+
+startCommand:
+  type: streamableHttp
+  url: https://llmintel.ai/v1/mcp
+  configSchema:
+    type: object
+    properties: {}
+    additionalProperties: false
+  exampleConfig: {}

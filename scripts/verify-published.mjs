@@ -5,13 +5,23 @@
  *   node scripts/verify-published.mjs
  */
 
-import { mkdtempSync } from "node:fs";
+import { mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 
-const SPEC = "@llmintel/mcp@0.1.0";
+/**
+ * Read the version from package.json rather than hardcoding it. A pinned spec silently rots into
+ * checking a version you released three bumps ago, which passes while the actual new release is
+ * broken. `npm view` is not consulted: this must verify the version we just tagged, not whatever
+ * npm currently calls `latest`.
+ */
+const pkg = JSON.parse(
+  readFileSync(join(dirname(dirname(fileURLToPath(import.meta.url))), "package.json"), "utf8"),
+);
+const SPEC = `${pkg.name}@${pkg.version}`;
 
 /**
  * Spawn from a scratch directory, never the repo. Run inside packages/mcp and npx resolves

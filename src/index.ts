@@ -26,5 +26,5 @@ export {
   URGENT_WINDOW_DAYS,
 } from "./format";
 export type { Risk } from "./format";
-export { buildServer, SERVER_NAME, SERVER_VERSION } from "./server";
+export { buildServer, describeTools, SERVER_NAME, SERVER_VERSION } from "./server";
 export type { BuildServerOptions } from "./server";

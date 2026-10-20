@@ -2,7 +2,7 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { describe, expect, it } from "vitest";
 import { CatalogClient, type ModelDetail, type ModelSummary } from "./client";
-import { buildServer } from "./server";
+import { buildServer, describeTools } from "./server";
 
 const NOW = new Date("2026-07-01T00:00:00Z");
 
@@ -91,6 +91,21 @@ describe("llmintel MCP server", () => {
       "search_models",
       "suggest_replacement",
     ]);
+  });
+
+  it("describeTools reports the same surface a connected client sees", async () => {
+    // Directories publish a static copy of the tool surface built from describeTools. If it can
+    // disagree with a live tools/list, the published copy is a lie.
+    const client = new CatalogClient({ baseUrl: "https://example.test", fetchImpl: fakeFetch({}) });
+    const described = await describeTools(buildServer({ client, now: () => NOW }));
+    const live = (await (await connect({})).listTools()).tools;
+
+    expect(described.map((t) => t.name).sort()).toEqual(live.map((t) => t.name).sort());
+    for (const tool of described) {
+      expect(tool.annotations?.readOnlyHint).toBe(true);
+      expect(tool.title).toBeTruthy();
+      expect(tool.inputSchema.type).toBe("object");
+    }
   });
 
   it("check_model resolves a bare alias and leads with the verdict", async () => {

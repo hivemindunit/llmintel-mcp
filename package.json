@@ -1,6 +1,6 @@
 {
   "name": "@llmintel/mcp",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "mcpName": "ai.llmintel/model-lifecycle",
   "description": "MCP server for AI model lifecycle data — check whether a model id is deprecated or retiring, and what to migrate to, across OpenAI, Anthropic, Azure, AWS Bedrock, Google, and Cohere.",
   "keywords": [

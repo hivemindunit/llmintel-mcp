@@ -1,4 +1,7 @@
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { Tool } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod";
 import { LIFECYCLE_STATES, PROVIDERS, type CatalogSource, type ModelSummary } from "./client";
 import {
@@ -12,7 +15,7 @@ import {
 } from "./format";
 
 export const SERVER_NAME = "llmintel";
-export const SERVER_VERSION = "0.2.0";
+export const SERVER_VERSION = "0.2.1";
 
 /**
  * Every tool here only reads the catalog, and the catalog is a service outside this process. Hosts
@@ -267,4 +270,24 @@ export function buildServer({ client, now = () => new Date() }: BuildServerOptio
   );
 
   return server;
+}
+
+/**
+ * Enumerate a server's tools by asking it over an in-process transport.
+ *
+ * Directories that publish a static description of the tool surface expect it to match what the
+ * server actually answers. Deriving that description from a real `tools/list` rather than a
+ * hand-kept copy means the two cannot disagree. Pass a server that is not already connected; this
+ * binds a transport to it.
+ */
+export async function describeTools(server: McpServer): Promise<Tool[]> {
+  const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+  const client = new Client({ name: "describe-tools", version: SERVER_VERSION });
+  await Promise.all([server.connect(serverTransport), client.connect(clientTransport)]);
+  try {
+    return (await client.listTools()).tools;
+  } finally {
+    await client.close();
+    await server.close();
+  }
 }

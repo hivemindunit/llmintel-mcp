@@ -65,7 +65,7 @@ The endpoint is stateless and read-only. It answers from the same catalog the np
 | Tool | Returns |
 | --- | --- |
 | `check_model` | Whether one model id is safe to use: lifecycle state, the retirement deadline in days, the replacement, and the source link. |
-| `list_retiring_models` | What breaks in the next 90 days. Past-due models are listed first, then upcoming ones soonest-first. |
+| `list_retiring_models` | What breaks in the next 180 days (default; configurable up to 1095). Past-due models are listed first, then upcoming ones soonest-first. |
 | `suggest_replacement` | The provider's own recommendation for what to move to. Falls back to same-provider active models when none was published. |
 | `search_models` | Catalog search filtered by provider and lifecycle state. |
 | `recent_lifecycle_changes` | The change feed across all providers, for questions like "what was deprecated this month". |
@@ -133,6 +133,15 @@ human verification queue before publication. Collector freshness is public at
 
 The same data is available as a plain REST API, also without a key. See
 [llmintel.ai/docs](https://llmintel.ai/docs).
+
+## Where to find it
+
+| Directory | Entry |
+| --- | --- |
+| Official MCP Registry | `ai.llmintel/model-lifecycle` |
+| [Glama](https://glama.ai/mcp/servers/@hivemindunit/llmintel-mcp) | `@hivemindunit/llmintel-mcp` |
+| [Smithery](https://smithery.ai/servers/llmintel/model-lifecycle) | `llmintel/model-lifecycle` |
+| [npm](https://www.npmjs.com/package/@llmintel/mcp) | `@llmintel/mcp` |
 
 ## Development
 

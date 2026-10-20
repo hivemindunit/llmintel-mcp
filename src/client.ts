@@ -26,8 +26,9 @@ export const PROVIDERS = [
   "azure",
   "bedrock",
   "google",
-  "cohere",
+  "vertex",
   "mistral",
+  "cohere",
 ] as const;
 
 export type Provider = (typeof PROVIDERS)[number];
